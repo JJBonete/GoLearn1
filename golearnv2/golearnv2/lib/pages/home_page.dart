@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:golearnv2/animations/fade_in_animation.dart';
+import 'package:golearnv2/components/app/progress_page/progress_tile.dart';
 import 'package:golearnv2/components/home_page/topic_tile.dart';
 import 'package:golearnv2/configs/constants.dart';
+import 'package:golearnv2/data/extras.dart';
 import 'package:golearnv2/data/words.dart';
 import 'package:golearnv2/databases/database_manager.dart';
 import 'package:golearnv2/notifiers/flashcards_notifier.dart';
@@ -23,6 +25,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<String> _topics = [];
+  List<String> _extras = [];
 
 //
 // THIS IS THE CODE FOR GETTER OF THE TOPICS
@@ -38,6 +41,13 @@ class _HomePageState extends State<HomePage> {
     _topics.insertAll(0, ['Random 5', 'Random 20', 'Random 50', 'Test All']);
 
     super.initState();
+// NEW ADDED
+// THIS IS THE CODE FOR GETTER OF THE EXTRAA TOPICS
+    for (var e in extras) {
+      if (!_extras.contains(e.extraword)) {
+        _extras.add(e.extraword);
+      }
+    }
   }
 
   @override
@@ -124,19 +134,42 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SliverGrid(
-              //
-              //THIS IS THE GRID COUNT OF THE TOPIC TILES
+            SliverPadding(
+              padding: EdgeInsets.all(3.0),
+              sliver: SliverGrid(
+                //
+                //THIS IS THE GRID COUNT OF THE TOPIC TILES
 
-              delegate: SliverChildBuilderDelegate(
-                  childCount: _topics.length,
-                  (context, index) => TopicTile(
-                        topic: _topics[index],
+                delegate: SliverChildBuilderDelegate(
+                    childCount: _topics.length,
+                    (context, index) => TopicTile(
+                          topic: _topics[index],
+                        )),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 6,
+                  mainAxisSpacing: 6,
+                ),
+              ),
+            ),
+
+            //THIS IS THE GRID COUNT OF THE EXTRA TOPIC TILES
+            //NEW ADDED
+
+            SliverPadding(
+              padding: EdgeInsets.all(3.0),
+              sliver: SliverGrid(
+                delegate: SliverChildBuilderDelegate(
+                  childCount: _extras.length,
+                  ((context, index) => ProgressTile(
+                        extra: _extras[index],
                       )),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 6,
-                mainAxisSpacing: 6,
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 6,
+                  mainAxisSpacing: 6,
+                ),
               ),
             )
           ],

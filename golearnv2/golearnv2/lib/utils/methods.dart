@@ -8,8 +8,10 @@ import 'package:golearnv2/components/app/quick_box.dart';
 import 'package:golearnv2/enums/selection_type.dart';
 import 'package:golearnv2/enums/settings.dart';
 import 'package:golearnv2/notifiers/flashcards_notifier.dart';
+import 'package:golearnv2/notifiers/progress_notifier.dart';
 import 'package:golearnv2/notifiers/settings_notifier.dart';
 import 'package:golearnv2/pages/flashcards_page.dart';
+import 'package:golearnv2/pages/progress_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,6 +28,20 @@ loadSession({
       MaterialPageRoute(builder: (context) => FlashcardsPage()));
   Provider.of<FlashcardsNotifier>(context, listen: false)
       .setTopic(topic: topic);
+}
+
+loadProgress({
+  required BuildContext context,
+  required String extra,
+}) {
+  //THIS WILL BE THE CLASS FOR ALL THE MAIN METHODS
+  // THE LOGICS TO NAVIGATING TO A NEW PAGE
+  // HELPER METHODS
+
+  Navigator.of(context).pushReplacement(
+      //THIS IS A NAVIGATOR TO TRANSFER TO A NEW PAGE
+      MaterialPageRoute(builder: (context) => ProgressPage()));
+  Provider.of<ProgressNotifier>(context, listen: false).setExtra(extra: extra);
 }
 
 // THIS CODES ARE CONNECTD TO THE SETTINGS PAGE
