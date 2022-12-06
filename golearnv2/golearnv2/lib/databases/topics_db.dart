@@ -68,7 +68,10 @@ class Topics {
     };
   }
 
-  String toString() {
-    return 'Topics(id: $id, topicname: $topicname)';
+  factory Topics.fromMap({required Map<String, dynamic> map}) {
+    return Topics(
+      topicname: map['topicname'],
+      id: map['id'],
+    );
   }
 }
