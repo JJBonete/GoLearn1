@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "golearnv2",
+            "cwd": "golearnv2",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "golearnv2 (profile mode)",
+            "cwd": "golearnv2",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "golearnv2 (release mode)",
+            "cwd": "golearnv2",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
