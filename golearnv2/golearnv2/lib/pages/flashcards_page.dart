@@ -49,9 +49,31 @@ class _FlashcardsPageState extends State<FlashcardsPage> {
             ignoring: notifier.ignoreTouches,
             child: Stack(
               children: [
-                Align(alignment: Alignment.bottomCenter, child: ProgressBar()),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(50, 5, 8, 5),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Image.asset(
+                      'assets/images/Wrong.png',
+                      height: 60,
+                      width: 60,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 5, 50, 5),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Image.asset(
+                      'assets/images/Check.png',
+                      height: 60,
+                      width: 60,
+                    ),
+                  ),
+                ),
                 Card2(),
                 Card1(),
+                Align(alignment: Alignment.topCenter, child: ProgressBar()),
               ],
             ),
           )),
