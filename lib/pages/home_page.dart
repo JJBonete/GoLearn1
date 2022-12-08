@@ -31,23 +31,22 @@ class _HomePageState extends State<HomePage> {
 // THIS IS THE CODE FOR GETTER OF THE TOPICS
   @override
   void initState() {
-    for (var t in words) {
-      if (!_topics.contains(t.topic)) {
-        _topics.add(t.topic);
-      }
-      _topics.sort();
-    }
+    DatabaseManager().getTopics().then((topics) {
+      _topics = topics;
+    });
 
-    _topics.insertAll(0, ['Random 5', 'Random 20', 'Random 50', 'Test All']);
+    // DatabaseManager().getWordsOfTopic();
+
+    // _topics.insertAll(0, ['Random 5', 'Random 20', 'Random 50', 'Test All']);
 
     super.initState();
 // NEW ADDED
 // THIS IS THE CODE FOR GETTER OF THE EXTRAA TOPICS
-    for (var e in extras) {
-      if (!_extras.contains(e.extraword)) {
-        _extras.add(e.extraword);
-      }
-    }
+    // for (var e in extras) {
+    //   if (!_extras.contains(e.extraword)) {
+    //     _extras.add(e.extraword);
+    //   }
+    // }
   }
 
   @override
@@ -181,18 +180,10 @@ class _HomePageState extends State<HomePage> {
   void _loadReviewPage(BuildContext context) {
     Provider.of<FlashcardsNotifier>(context, listen: false)
         .setTopic(topic: 'Review');
+    final reviewNotifier = Provider.of<ReviewNotifier>(context, listen: false);
+    reviewNotifier.disableButtons(disable: false);
 
-    DatabaseManager().selectWords().then((words) {
-      final reviewNotifier =
-          Provider.of<ReviewNotifier>(context, listen: false);
-      if (words.isEmpty) {
-        reviewNotifier.disableButtons(disable: true);
-      } else {
-        reviewNotifier.disableButtons(disable: false);
-      }
-
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ReviewPage()));
-    });
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ReviewPage()));
   }
 }

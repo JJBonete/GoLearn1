@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/word.dart';
+import 'package:golearnv2/data/words.dart';
+import 'dart:developer' as developer;
 
 class DatabaseManager {
   //Singleton
@@ -12,26 +15,60 @@ class DatabaseManager {
 
   //Database
   // I ONLY HAVE 1 TABLE FOR MY DATABASE
-  final String _database = 'flashcards.db',
-      _table = 'words',
-      _column1 = 'topic',
-      _column2 = 'theword',
-      _column3 = 'type';
+  final String _database = 'flashcards.db';
+  final String _table = 'words';
 
   Future<Database> initDatabase() async {
-    final devicesPath = await getDatabasesPath();
-    final path = join(devicesPath, _database);
+    final dbPath = join(await getDatabasesPath(), _database);
 
-    return await openDatabase(path, onCreate: (db, version) {
+    return await openDatabase(dbPath, onCreate: (db, version) {
+      developer.log('initializing database');
       db.execute(
-          'CREATE TABLE $_table($_column1 TEXT, $_column2 TEXT PRIMARY KEY, $_column3 TEXT)');
+          'CREATE TABLE words (topic TEXT, theword TEXT PRIMARY KEY, type TEXT)');
+      words.forEach((word) => {
+            db.insert(_table, word.toMap(),
+                conflictAlgorithm: ConflictAlgorithm.replace)
+          });
     }, version: 1);
   }
 
-  Future<void> insertWord({required Word word}) async {
+  Future<String> insertWord({required Word word}) async {
     final db = await initDatabase();
-    await db.insert(_table, word.toMap(),
+    int id = await db.insert(_table, word.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+    return getWord(id: id);
+  }
+
+  Future<String> getWord({required int id}) async {
+    final db = await initDatabase();
+    String statement = 'SELECT * FROM words WHERE ID = ?';
+    List<Map> result = await db.rawQuery(statement, [id]);
+
+    return result.isEmpty ? '' : result[1].toString();
+  }
+
+  Future<List<String>> getTopics() async {
+    final db = await initDatabase();
+    List<Map<String, Object?>> results =
+        await db.query(_table, distinct: true, columns: ['topic']);
+
+    List<String> data = [];
+
+    results.forEach((record) => data.add(record['topic'] as String));
+    data.sort();
+    data.insertAll(0, ['Random 5', 'Random 20', 'Random 50', 'Test All']);
+
+    return data;
+  }
+
+  Future<void> getWordsOfTopic({required String topic}) async {
+    final db = await initDatabase();
+    List<Map<String, dynamic>> results =
+        await db.query(_table, where: "topic=?", whereArgs: [topic]);
+    developer.log("Results from Topics Database $results");
+    // temporarily delete the database
+    await removeDatabase();
+    return;
   }
 
   Future<List<Word>> selectWords({int? limit}) async {
@@ -55,6 +92,7 @@ class DatabaseManager {
   Future<void> removeDatabase() async {
     final devicesPath = await getDatabasesPath();
     final path = join(devicesPath, _database);
+    developer.log("removing database $path");
     await deleteDatabase(path);
   }
 }

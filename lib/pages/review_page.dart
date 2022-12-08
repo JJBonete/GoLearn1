@@ -50,13 +50,13 @@ class _ReviewPage extends State<ReviewPage> {
                       final provider = Provider.of<FlashcardsNotifier>(context,
                           listen: false);
                       provider.selectedWords.clear();
-                      DatabaseManager().selectWords().then((words) {
-                        provider.selectedWords = words.toList();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const FlashcardsPage()));
-                      });
+                      // DatabaseManager().selectWords().then((words) {
+                      //   provider.selectedWords = words.toList();
+                      //   Navigator.pushReplacement(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => const FlashcardsPage()));
+                      // });
                     },
                   ),
                   HeaderButton(
@@ -163,12 +163,12 @@ class _ReviewPage extends State<ReviewPage> {
             ));
 
     _reviewWords.remove(w);
-    await DatabaseManager().removeWord(word: w);
-    if (_reviewWords.isEmpty) {
-      if (!mounted) return;
-      Provider.of<ReviewNotifier>(context, listen: false)
-          .disableButtons(disable: true);
-    }
+    // await DatabaseManager().removeWord(word: w);
+    // if (_reviewWords.isEmpty) {
+    //   if (!mounted) return;
+    //   Provider.of<ReviewNotifier>(context, listen: false)
+    //       .disableButtons(disable: true);
+    // }
   }
 
   _clearAllWords() {
@@ -187,7 +187,7 @@ class _ReviewPage extends State<ReviewPage> {
       Provider.of<ReviewNotifier>(context, listen: false)
           .disableButtons(disable: true);
       _reviewWords.clear();
-      await DatabaseManager().removeAllWords();
+      // await DatabaseManager().removeAllWords();
     });
   }
 }
