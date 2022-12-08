@@ -181,18 +181,10 @@ class _HomePageState extends State<HomePage> {
   void _loadReviewPage(BuildContext context) {
     Provider.of<FlashcardsNotifier>(context, listen: false)
         .setTopic(topic: 'Review');
+    final reviewNotifier = Provider.of<ReviewNotifier>(context, listen: false);
+    reviewNotifier.disableButtons(disable: false);
 
-    DatabaseManager().selectWords().then((words) {
-      final reviewNotifier =
-          Provider.of<ReviewNotifier>(context, listen: false);
-      if (words.isEmpty) {
-        reviewNotifier.disableButtons(disable: true);
-      } else {
-        reviewNotifier.disableButtons(disable: false);
-      }
-
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ReviewPage()));
-    });
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ReviewPage()));
   }
 }

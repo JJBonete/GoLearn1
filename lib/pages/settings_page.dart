@@ -57,7 +57,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       callback: () async {
                         notifier.resetSettings();
                         runQuickBox(context: context, text: 'Settings Reset');
-                        await DatabaseManager().removeDatabase();
+                        // await DatabaseManager().removeDatabase();
 
                         Future.delayed(const Duration(milliseconds: 1000), () {
                           if (!mounted) return;

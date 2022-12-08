@@ -77,13 +77,6 @@ class _ResultsBoxState extends State<ResultsBox> {
                               onPressed: _haveSavedCards
                                   ? null
                                   : () async {
-                                      for (int i = 0;
-                                          i < notifier.incorrectCards.length;
-                                          i++) {
-                                        await DatabaseManager().insertWord(
-                                            word: notifier.incorrectCards[i]);
-                                      }
-
                                       _haveSavedCards = true;
                                       runQuickBox(
                                           context: context,
