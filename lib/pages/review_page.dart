@@ -25,6 +25,19 @@ class ReviewPage extends StatefulWidget {
 class _ReviewPage extends State<ReviewPage> {
   final _listkey = GlobalKey<AnimatedListState>();
 
+  //CREATED A LIST FOR DROPDOWN
+  List<DropdownMenuItem<int>> listItems = [
+    const DropdownMenuItem(
+      child: Text("2016"),
+      value: 2016,
+    ),
+    DropdownMenuItem(
+      child: Text("2021"),
+      value: 2021,
+    )
+  ];
+  int _selectedValue;
+
   final _reviewWords = [];
   @override
   Widget build(BuildContext context) {
@@ -91,10 +104,17 @@ class _ReviewPage extends State<ReviewPage> {
           //===================================
           //THIS IS THE CALL METHOD OF DROPDOWN
           Expanded(
-            child: DropdownButtonExample(
-              key: _listkey,
-            ),
-          ),
+              child: DropdownButton(
+            value: _selectedValue,
+            items: listItems,
+            hint: Text("Select"),
+            onChanged: (value) {
+              setState(() {
+                _selectedValue = value!;
+                print(value);
+              });
+            },
+          )),
           //===================================
 
           Expanded(
