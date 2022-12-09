@@ -4,6 +4,7 @@ import 'package:golearnv2/components/review_page/header_button.dart';
 import 'package:golearnv2/components/review_page/selection_button.dart';
 import 'package:golearnv2/components/review_page/word_tile.dart';
 import 'package:golearnv2/configs/constants.dart';
+import 'package:golearnv2/configs/dropdown.dart';
 import 'package:golearnv2/databases/database_manager.dart';
 import 'package:golearnv2/enums/selection_type.dart';
 import 'package:golearnv2/models/word.dart';
@@ -86,6 +87,16 @@ class _ReviewPage extends State<ReviewPage> {
               ),
             ),
           ),
+
+          //===================================
+          //THIS IS THE CALL METHOD OF DROPDOWN
+          Expanded(
+            child: DropdownButtonExample(
+              key: _listkey,
+            ),
+          ),
+          //===================================
+
           Expanded(
             flex: 10,
             child: FutureBuilder(
