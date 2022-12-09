@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:golearnv2/components/flashcards_page/results_box.dart';
 import 'package:golearnv2/configs/constants.dart';
 import 'package:golearnv2/data/words.dart';
+import 'package:golearnv2/databases/database_manager.dart';
 import 'package:golearnv2/enums/slide_direction.dart';
 import 'package:golearnv2/models/word.dart';
 

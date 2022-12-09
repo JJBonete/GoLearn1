@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:golearnv2/databases/database_manager.dart';
 import '../models/word.dart';
 import 'package:golearnv2/data/words.dart';
 import 'dart:developer' as developer;
@@ -15,8 +16,12 @@ class DatabaseManager {
 
   //Database
   // I ONLY HAVE 1 TABLE FOR MY DATABASE
-  final String _database = 'flashcards.db';
-  final String _table = 'words';
+  final String _database = 'flashcards.db',
+      _table = 'words',
+      _column1 = 'topic',
+      _column2 = 'theword',
+      _column3 = 'type';
+  final String _reviewTable = 'reviews';
 
   Future<Database> initDatabase() async {
     final dbPath = join(await getDatabasesPath(), _database);
@@ -30,6 +35,19 @@ class DatabaseManager {
                 conflictAlgorithm: ConflictAlgorithm.replace)
           });
     }, version: 1);
+  }
+
+  Future<List<Word>> filterTopics({required String topic}) async {
+    final db = await initDatabase();
+
+    if (topic == 'All') {
+      return await selectWords();
+    }
+
+    List<Map<String, dynamic>> results =
+        await db.query(_table, where: '$_column1=?', whereArgs: [topic]);
+    return List.generate(
+        results.length, (index) => Word.fromMap(map: results[index]));
   }
 
   Future<String> insertWord({required Word word}) async {

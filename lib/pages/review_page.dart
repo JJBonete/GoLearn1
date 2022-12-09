@@ -14,6 +14,9 @@ import 'package:golearnv2/pages/flashcards_page.dart';
 import 'package:golearnv2/utils/methods.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer' as developer;
+
+const List<String> list = <String>['All', 'Animals', "Alphabet"];
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({Key? key}) : super(key: key);
@@ -25,18 +28,7 @@ class ReviewPage extends StatefulWidget {
 class _ReviewPage extends State<ReviewPage> {
   final _listkey = GlobalKey<AnimatedListState>();
 
-  //CREATED A LIST FOR DROPDOWN
-  List<DropdownMenuItem<int>> listItems = [
-    const DropdownMenuItem(
-      child: Text("2016"),
-      value: 2016,
-    ),
-    DropdownMenuItem(
-      child: Text("2021"),
-      value: 2021,
-    )
-  ];
-  int _selectedValue;
+  String _selectedValue = list.first;
 
   final _reviewWords = [];
   @override
@@ -106,12 +98,17 @@ class _ReviewPage extends State<ReviewPage> {
           Expanded(
               child: DropdownButton(
             value: _selectedValue,
-            items: listItems,
+            items: list.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
             hint: Text("Select"),
             onChanged: (value) {
+              developer.log("$value");
               setState(() {
                 _selectedValue = value!;
-                print(value);
               });
             },
           )),
@@ -120,9 +117,10 @@ class _ReviewPage extends State<ReviewPage> {
           Expanded(
             flex: 10,
             child: FutureBuilder(
-                future: DatabaseManager().selectWords(),
+                future: DatabaseManager().filterTopics(topic: _selectedValue),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                    _clearAllWords();
                     var sortList = snapshot.data as List<Word>;
 
                     sortList.sort((a, b) => a.theword.compareTo(b.theword));
@@ -194,12 +192,6 @@ class _ReviewPage extends State<ReviewPage> {
             ));
 
     _reviewWords.remove(w);
-    // await DatabaseManager().removeWord(word: w);
-    // if (_reviewWords.isEmpty) {
-    //   if (!mounted) return;
-    //   Provider.of<ReviewNotifier>(context, listen: false)
-    //       .disableButtons(disable: true);
-    // }
   }
 
   _clearAllWords() {
@@ -218,7 +210,6 @@ class _ReviewPage extends State<ReviewPage> {
       Provider.of<ReviewNotifier>(context, listen: false)
           .disableButtons(disable: true);
       _reviewWords.clear();
-      // await DatabaseManager().removeAllWords();
     });
   }
 }
